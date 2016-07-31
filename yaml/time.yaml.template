@@ -1,0 +1,45 @@
+---
+
+# 'time.yaml.template'.
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: "time-{{ index . "VERSION" | dotstodashes }}"
+  labels:
+    name: "time-{{ index . "VERSION" | dotstodashes }}"
+spec:
+  type: NodePort
+  ports:
+  - name: time
+    port: 7002
+    protocol: TCP
+  selector:
+    name: "time-{{ index . "VERSION" | dotstodashes }}"
+
+
+---
+
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: "time-{{ index . "VERSION" | dotstodashes }}"
+  labels:
+    name: "time-{{ index . "VERSION" | dotstodashes }}"
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        name: "time-{{ index . "VERSION" | dotstodashes }}"
+    spec:
+      containers:
+      - image: "vm1:5000/julio/time:{{ index . "VERSION" }}"
+        name: "time-{{ index . "VERSION" | dotstodashes }}"
+        env:
+        - name: PORT
+          value: '7002'
+        ports:
+        - name: time
+          containerPort: 7002

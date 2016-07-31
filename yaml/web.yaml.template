@@ -1,0 +1,49 @@
+---
+
+# 'web.yaml.template'.
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: "web-{{ index . "VERSION" | dotstodashes }}"
+  labels:
+    name: "web-{{ index . "VERSION" | dotstodashes }}"
+spec:
+  type: NodePort
+  ports:
+  - name: web
+    port: 7000
+    protocol: TCP
+  selector:
+    name: "web-{{ index . "VERSION" | dotstodashes }}"
+
+
+---
+
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: "web-{{ index . "VERSION" | dotstodashes }}"
+  labels:
+    name: "web-{{ index . "VERSION" | dotstodashes }}"
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        name: "web-{{ index . "VERSION" | dotstodashes }}"
+    spec:
+      containers:
+      - image: "vm1:5000/julio/web:{{ index . "VERSION" }}"
+        name: "web-{{ index . "VERSION" | dotstodashes }}"
+        env:
+        - name: PORT
+          value: '7000'
+        - name: DATEENDPOINT
+          value: date.default.svc.cluster.local
+        - name: TIMEENDPOINT
+          value: time.default.svc.cluster.local
+        ports:
+        - name: web
+          containerPort: 7000

@@ -1,0 +1,19 @@
+---
+
+# 'time-endpoint.yaml.template'.
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: time
+  labels:
+    name: time
+spec:
+  type: NodePort
+  ports:
+  - name: time
+    port: 7002
+    protocol: TCP
+  selector:
+    name: "time-{{ index . "VERSION" | dotstodashes }}"

@@ -1,0 +1,11 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: web
+  annotations:
+    scale: "3"
+    http.port: "80"
+spec:
+  backend:
+    serviceName: web
+    servicePort: 7000

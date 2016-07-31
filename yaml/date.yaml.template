@@ -1,0 +1,45 @@
+---
+
+# 'date.yaml.template'.
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: "date-{{ index . "VERSION" | dotstodashes }}"
+  labels:
+    name: "date-{{ index . "VERSION" | dotstodashes }}"
+spec:
+  type: NodePort
+  ports:
+  - name: date
+    port: 7001
+    protocol: TCP
+  selector:
+    name: "date-{{ index . "VERSION" | dotstodashes }}"
+
+
+---
+
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: "date-{{ index . "VERSION" | dotstodashes }}"
+  labels:
+    name: "date-{{ index . "VERSION" | dotstodashes }}"
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        name: "date-{{ index . "VERSION" | dotstodashes }}"
+    spec:
+      containers:
+      - image: "vm1:5000/julio/date:{{ index . "VERSION" }}"
+        name: "date-{{ index . "VERSION" | dotstodashes }}"
+        env:
+        - name: PORT
+          value: '7001'
+        ports:
+        - name: date
+          containerPort: 7001

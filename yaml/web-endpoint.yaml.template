@@ -1,0 +1,19 @@
+---
+
+# 'web-endpoint.yaml.template'.
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  labels:
+    name: web
+spec:
+  type: NodePort
+  ports:
+  - name: web
+    port: 7000
+    protocol: TCP
+  selector:
+    name: "web-{{ index . "VERSION" | dotstodashes }}"

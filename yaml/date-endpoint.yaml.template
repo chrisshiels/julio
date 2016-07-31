@@ -1,0 +1,19 @@
+---
+
+# 'date-endpoint.yaml.template'.
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: date
+  labels:
+    name: date
+spec:
+  type: NodePort
+  ports:
+  - name: date
+    port: 7001
+    protocol: TCP
+  selector:
+    name: "date-{{ index . "VERSION" | dotstodashes }}"
