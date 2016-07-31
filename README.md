@@ -454,7 +454,7 @@ vm1$ /vagrant/templater/templater \
 
 ## Configure ingress controller
 ```
-vm1$ kubectl create -f /vagrant/yaml/web-ingress.yaml 
+vm1$ kubectl create -f /vagrant/yaml/web-ingress.yaml
 ingress "web" created
 ```
 
